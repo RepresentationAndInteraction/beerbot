@@ -28,6 +28,19 @@ too_much(B) :-
 	   .date(YY,MM,DD); .time(HH,NN,SS);
 	   +consumed(YY,MM,DD,HH,NN,SS,beer).
 
++!has(owner,beer)[source(self)]
+	: available(beer,fridge) & not too_much(beer)
+	<- !at(beerbot,fridge);
+	   open(fridge);
+	   get(beer);
+	   close(fridge);
+	   !at(beerbot,owner);
+	   hand_in(beer);
+	   ?has(owner,beer);
+	   // remember that another beer has been consumed
+	   .date(YY,MM,DD); .time(HH,NN,SS);
+	   +consumed(YY,MM,DD,HH,NN,SS,beer).
+
 @h2
 +!has(owner,beer)[source(owner)]
 	: not available(beer,fridge)
@@ -72,6 +85,11 @@ too_much(B) :-
 +stock(beer,N)
 	: N > 0 & not available(beer,fridge)
 	<- -+available(beer,fridge).
+
++msg(M)[source(Src)]
+	: true
+	<- .print(Src, ":", M);
+	   -msg(M).
 
 +?time(T) : true
 	<- time.check(T).
