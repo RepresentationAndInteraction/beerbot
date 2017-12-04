@@ -15,7 +15,7 @@ too_much(B) :-
 /* Plans */
 
 @h1
-+!has(owner,beer)
++!has(owner,beer)[source(owner)]
 	: available(beer,fridge) & not too_much(beer)
 	<- !at(beerbot,fridge);
 	   open(fridge);
@@ -29,13 +29,13 @@ too_much(B) :-
 	   +consumed(YY,MM,DD,HH,NN,SS,beer).
 
 @h2
-+!has(owner,beer)
++!has(owner,beer)[source(owner)]
 	: not available(beer,fridge)
 	<- .send(supermarket, achieve, order(beer,5));
 	   !at(beerbot,fridge). // go to fridge and wait there.
 
 @h3
-+!has(owner,beer)
++!has(owner,beer)[source(owner)]
 	: too_much(beer) & limit(beer,L)
 	<- .concat("The Department of Health does not allow me to give you more than ", L,
 	           " beers a day! I am very sorry about that!",M);
